@@ -1,0 +1,151 @@
+<script type='text/babel'>
+const { useState } = React
+const { 
+    Container, 
+    Row,
+    Col,
+    Button,
+    ButtonGroup,
+    Input,
+    Modal, 
+    ModalHeader, 
+    ModalBody, 
+    ModalFooter, 
+    Label
+ } = Reactstrap
+
+const EstimatingStartScreen = (props) => {
+    const [isCopy, setIsCopy] = useState(false)
+    const [fieldValue, setFieldValue] = useState(null)
+    const [filteredEstimates, setFilteredEstimates] = useState([])
+
+useEffect(() => {
+    const timeout = setTimeout(() => {
+      newNumber()
+        .then((result) => {
+          setFieldValue(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const toggle = () => setIsCopy(current => !current);
+  const [modal, setModal] = useState(false);
+  const toggleModal = () => setModal(!modal);
+
+  const newNumber = () => {
+    return new Promise((resolve, reject) => {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).estNumberFinder();
+    });
+  };
+
+  useEffect(() => {
+    const fetchPreviousEstimates = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setFilteredEstimates).getEstimates();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPreviousEstimates();
+  }, []);
+
+  const getAQuoteNumber = () => {
+    google.script.run.withSuccessHandler(loadNumber).newEstimateNumber();
+    const productGroup = document.getElementById('productGroup').value;
+    google.script.run.estTypeAndNumberToSheet(productGroup);
+  }
+
+  function loadNumber(newNumber, fieldValue) {
+  const newEstimateNumber = "D" + newNumber;
+  alert("D" + newNumber);
+  props.setActiveTab(2);
+  
+}
+
+  const handleEstimateSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    const filtered = props.estimateList.filter(estimate => estimate.toLowerCase().includes(query));
+    console.log(setFilteredEstimates)
+    setFilteredEstimates(filtered);
+  };
+
+  return (
+    <Container>
+    <p></p>
+    <Row>
+    </Row>
+    <Row className='justify-content-center'>
+        <Col className='col-md-6'>
+            Hi, {props.user}.
+        
+        
+            <Input
+            type='select'
+            id='productGroup'
+            className='form-control'>
+                <option>What are we making today?</option>
+                <option>Digital Print</option>
+                <option>Litho Print</option>
+                <option>Screen Printed Textile</option>
+                <option>Screen/Letterpress Flatstock</option>
+                <option>Non-print</option>
+
+            </Input>
+            </Col>
+            
+    </Row>
+    <br />
+    <Row>
+    <div className='d-flex justify-content-end'>
+        <ButtonGroup>
+            <Button 
+                outline
+                color='info'
+                id='loadButton'
+                onClick={getAQuoteNumber}
+                >Get a Quote Number
+            </Button>
+            <Button
+                outline
+                color='secondary'
+                id='openButton'
+                onClick={toggleModal}
+                >
+                    Load
+                </Button>
+            <Button
+            color='danger'
+            id='clearButton'>Clear</Button>
+        </ButtonGroup>
+        </div>
+        </Row>
+        <Modal isOpen={modal} toggle={toggleModal} >
+        <ModalHeader toggle={toggleModal}>Load an estimate</ModalHeader>
+        <ModalBody>
+          <Label htmlFor='prevEst'>Previous Estimate</Label>
+          <Input type='text' id='prevEst'onChange={handleEstimateSearch}/>
+            <datalist id='prevEst'>
+              {filteredEstimates.map(estimate => (
+                <option key={estimate} value={estimate} />
+              ))}
+            </datalist>
+        </ModalBody>
+        <ModalFooter>
+        <ButtonGroup>
+          <Button color="info" outline onClick={toggleModal}>Load Estimate</Button>{' '}
+          <Button color="warning" outline onClick={toggleModal}>Cancel</Button>
+          </ButtonGroup>
+        </ModalFooter>
+      </Modal>
+    
+    </Container>
+  )
+}
+
+</script>

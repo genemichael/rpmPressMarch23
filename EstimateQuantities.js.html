@@ -1,0 +1,91 @@
+<script type="text/babel">
+const { useState } = React
+const {
+  Container,
+  Table,
+  Input,
+  Button,
+  FormGroup,
+  Label,
+} = Reactstrap
+
+function EstimateQuantities(props) {
+  const [rows, setRows] = useState([{ quantity: "" }]);
+
+  const handleAddRow = () => {
+    const newRow = { quantity: "" };
+    setRows([...rows, newRow]);
+  };
+
+  const handleRemoveRow = (index) => {
+    const newRows = [...rows];
+    newRows.splice(index, 1);
+    setRows(newRows);
+  };
+
+  const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const newRows = [...rows];
+    newRows[index][name] = value;
+    setRows(newRows);
+  };
+
+  return (
+    <Container>
+      <Table>
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>
+                <FormGroup>
+                  <Label for={`quantity-${index}`}>Quantity</Label>
+                  <Input
+                    type="number"
+                    name="quantity"
+                    id={`quantity-${index}`}
+                    value={row.quantity}
+                    onChange={(event) => handleInputChange(index, event)}
+                  />
+                </FormGroup>
+              </td>
+              <td>
+                {index > 0 && (
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => handleRemoveRow(index)}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <div className="d-flex justify-content-end">
+        <Button outline color="primary" onClick={handleAddRow}>
+          Add
+        </Button>{" "}
+        <Button
+          color="primary"
+          onClick={() => {
+            const partName = document.getElementById("partName").value;
+            const quantities = rows.map((row) => row.quantity);
+            google.script.run.putQuantities(quantities, partName);
+          }}
+        >
+          Save
+        </Button>
+      </div>
+    </Container>
+  );
+}
+
+</script>

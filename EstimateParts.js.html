@@ -1,0 +1,80 @@
+<script type="text/babel">
+const {useEffect, useState} = React
+const { Table, Button } = Reactstrap
+
+const EstimateParts = ({ onDelete }) => {
+  const [partsAvailable, setPartsAvailable] = useState([]);
+  const [selectedPart, setSelectedPart] = useState(null)
+
+  useEffect(() => {
+    google.script.run.withSuccessHandler(setPartsAvailable).getParts();
+    console.log(partsAvailable)
+  }, []);
+
+  const onSelect = async (part) => {
+  console.log(part)
+  console.log(part.part.part_name)
+  try {
+    const partDetails = await google.script.run.withSuccessHandler(setSelectedPart).getPartsDetail(part.part.part_name);
+    console.log(partDetails);
+
+    const fetchData = async () => {
+      try {
+        document.getElementById('partName').value = partDetails.part_name || "";
+        document.getElementById('pDimA').value = partDetails.Part_Dim_A || "";
+        document.getElementById('pDimB').value = partDetails.Part_Dim_B || "";
+        document.getElementById('pages').value = partDetails.Pages || "";
+        document.getElementById('sDimA').value = partDetails.Sub_Dim_A || "";
+        document.getElementById('sDimB').value = partDetails.Sub_Dim_B || "";
+        document.getElementById('numOut').value = partDetails.Out || "";
+        document.getElementById('substrate').value = partDetails.Substrate || "";
+        document.getElementById('unlistedSubstrate').value = partDetails.Unlisted_Substrate || "";
+        document.getElementById('colsA').value = partDetails.Cols_Side_A || "";
+        document.getElementById('colsB').value = partDetails.Cols_Side_B || "";
+        document.getElementById('versions').value = partDetails.Versions || "";
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  const handleSelect = async (partName) => {
+    const partDetails = await onSelect(partName);
+    setSelectedPart(partDetails);
+  };
+
+  return (
+    <Table>
+      <thead>
+        <tr>
+          <th>Part Name</th>
+          <th>Select</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {partsAvailable.map((part, index) => (
+          <tr key={index}>
+            <td>{part.part_name}</td>
+            <td>
+              <Button outline color="primary" onClick={() => onSelect({part})}>
+                Select
+              </Button>
+            </td>
+            <td>
+              <Button outline color="danger" onClick={() => onDelete(part)}>
+                Delete
+              </Button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+};
+</script>

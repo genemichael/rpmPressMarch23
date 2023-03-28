@@ -1,0 +1,28 @@
+<script type='text/babel'>
+const { Button, ButtonGroup, Row } = Reactstrap
+
+const SaveClear = () => {
+  return (
+    <Row>
+         
+         <div className='d-flex justify-content-end'>
+     
+             <ButtonGroup className='btn-group'>
+                 <Button 
+                     outline
+                     color='primary'
+                     id='saveButton'
+                     >Save
+                 </Button>
+                 
+                 <Button
+                 color='danger'
+                 className='btn'
+                 id='clearButton'>Clear</Button>
+             </ButtonGroup>
+             </div>
+             </Row>
+  )
+}
+
+</script>

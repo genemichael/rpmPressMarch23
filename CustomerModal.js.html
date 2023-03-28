@@ -1,0 +1,154 @@
+<script type="text/babel">
+const { useState } = React
+const { Modal, ModalHeader, ModalBody, ModalFooter, Button, FormGroup, Label, Input } = Reactstrap
+
+const CustomerModal = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [contact, setContact] = useState('');
+  const [position, setPosition] = useState('');
+  const [webLink, setWebLink] = useState('');
+  const [projectedSale, setProjectedSale] = useState('');
+  const [comments, setComments] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [fax, setFax] = useState('');
+  const [mailingAddress, setMailingAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zip, setZip] = useState('');
+  const [country, setCountry] = useState('');
+  const [newCust, setNewCust] = useState(false)
+
+  const handleToggleSwitchChange = () => {
+    setNewCust(!newCust);    
+  };
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleSave = () => {
+    const newCustomer = {
+      companyName,
+      lastName,
+      firstName,
+      contact,
+      position,
+      webLink,
+      projectedSale,
+      comments,
+      emailAddress,
+      phone,
+      mobile,
+      fax,
+      mailingAddress,
+      city,
+      state,
+      zip,
+      country,
+    };
+    google.script.run.putCustomer(newCustomer);
+    toggle();
+  };
+
+
+  return (
+  <>
+            <input
+                type="checkbox"
+                id='newCustomer'
+                checked={showModal}
+                onChange={toggle}
+              />
+            <Modal isOpen={isOpen} toggle={toggle}>
+              <ModalHeader toggle={toggle}>Add Customer</ModalHeader>
+              <ModalBody>
+                <Form onSubmit={handleSave}>
+                  <FormGroup>
+                    <Label for="companyName">Company Name</Label>
+                    <Input type="text" name="companyName" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="lastName">Last Name</Label>
+                    <Input type="text" name="lastName" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="firstName">First Name</Label>
+                    <Input type="text" name="firstName" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="contact">Contact</Label>
+                    <Input type="text" name="contact" id="contact" value={contact} onChange={(e) => setContact(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="position">Position</Label>
+                    <Input type="text" name="position" id="position" value={position} onChange={(e) => setPosition(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="webLink">Web Link</Label>
+                    <Input type="text" name="webLink" id="webLink" value={webLink} onChange={(e) => setWebLink(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="projectedSale">Projected Sale</Label>
+          <Input type="text" name="projectedSale" id="projectedSale" value={projectedSale} onChange={(e) => setProjectedSale(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="comments">Comments</Label>
+                    <Input type="textarea" name="comments" id="comments" value={comments} onChange={(e) => setComments(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="emailAddress">Email Address</Label>
+          <Input type="email" name="emailAddress" id="emailAddress" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="phone">Phone</Label>
+                    <Input type="tel" name="phone" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="mobile">Mobile</Label>
+                    <Input type="tel" name="mobile" id="mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="fax">Fax</Label>
+                    <Input type="tel" name="fax" id="fax" value={fax} onChange={(e) => setFax(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="mailingAddress">Mailing Address</Label>
+                    <Input type="text" name="mailingAddress" id="mailingAddress" value={mailingAddress} onChange={(e) => setMailingAddress(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="city">City</Label>
+                    <Input type="text" name="city" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="state">State</Label>
+                    <Input type="text" name="state" id="state" value={state} onChange={(e) => setState(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="zip">Zip</Label>
+                    <Input type="text" name="zip" id="zip" value={zip} onChange={(e) => setZip(e.target.value)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="country">Country</Label>
+                    <Input type="text" name="country" id="country" value={country} onChange={(e) => setCountry(e.target.value)} />
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" form="form" color="primary" outline onClick={handleSave}>
+                  Save
+                </Button>
+                <Button color="secondary" outline onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+            </>
+          );
+        };
+</script>

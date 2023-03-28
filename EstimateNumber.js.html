@@ -1,0 +1,18 @@
+<script type='text/babel'>
+const { useState } = React
+
+const EstimateNumber = (newNumber) => {
+    const [estimateNum, setEstimateNum] = useState();
+    const getEstimateNumber = () => {
+        google.script.run.withSuccessHandler(loadNumber).newEstimateNumber();
+            alert("click");
+          }
+          function loadNumber(estimateNum) {
+            
+            alert("D" + estimateNum);
+    }
+  return (
+    "D"+estimateNum
+  )
+}
+</script>

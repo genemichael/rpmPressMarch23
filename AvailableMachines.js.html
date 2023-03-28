@@ -1,0 +1,169 @@
+<script type='text/babel'>
+const {useState} = React;
+const { Button, Table, Row, Col, Tab, Input } = Reactstrap;
+
+const AvailableMachines = (props) => {
+  const [selectedMachines, setSelectedMachines] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [passSheetForPart, setPassSheetForPart] = useState([]);
+  const [partName, setPartName] = useState(props.partName);
+
+  const generateUniqueId = () => {
+    return Math.floor(Math.random() * Date.now()).toString();
+  };
+
+  useEffect(() => {
+    const fetchMachines = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setMachines).getMachines();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchMachines();
+  }, []);
+
+  const addSheetRouteToPart = () => {
+    const newSheetRoute = selectedMachines.map((machine) => ({
+      id: generateUniqueId(),
+      name: machine.name,
+      runMethod: machine.runMethod,
+      partName: partName,
+    }));
+    setPassSheetForPart((prevSheetRoutes) => [...prevSheetRoutes, ...newSheetRoute]);
+    console.log(newSheetRoute)
+    google.script.run.passSheetProductionRoute(newSheetRoute);
+  };
+
+  const handleAdd = (machineName) => {
+    setSelectedMachines((prevMachines) => [...prevMachines, { name: machineName, runMethod: '' }]);
+  };
+
+  const handleMethodChange = (index, method) => {
+    setSelectedMachines((prevMachines) => {
+      const newMachines = [...prevMachines];
+      newMachines[index].runMethod = method;
+      return newMachines;
+    });
+  };
+
+  const handleRemove = (index) => {
+    setSelectedMachines((prevMachines) => {
+      const newMachines = [...prevMachines];
+      newMachines.splice(index, 1);
+      return newMachines;
+    });
+  };
+
+  useEffect(() => {
+    setPartName(props.partName);
+  }, [props.partName]);
+
+  const handlePartNameChange = (newPartName) => {
+    setPartName(newPartName);
+    props.onPartNameChange(newPartName);
+  };
+
+
+  return (
+    <>
+    <Row>
+    <Col className='col-12'>
+          <Input
+            type='select'
+            name='partName'
+            id='partName'
+            value={partName}
+            onChange={handlePartNameChange}
+          >
+            <option></option>
+          </Input>
+        </Col>
+      </Row>
+      
+      <Row>
+      <Col className='col-5'>
+        <Table hover>
+          <thead>
+            <tr>
+              <th>Machine</th>
+              <th>Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            {machines.map((machine) => (
+              <tr key={machine}>
+                <td>{machine}</td>
+                <td>
+                  <Button color='info' onClick={() => handleAdd(machine)}>
+                    +
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Col>
+      <Col className='col-2'></Col>
+      <Col className='col-5'>
+        <Table hover>
+          <thead>
+            <tr>
+              <th>Selected Machine</th>
+              <th>Run Method</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedMachines.map((machine, index) => (
+              <tr key={index}>
+                <td>{machine.name}</td>
+                <td>
+                  <Input
+                    type='select'
+                    className='form-control'
+                    name='runMethod'
+                    id='runMethod'
+                    value={machine.runMethod}
+                    onChange={(e) => handleMethodChange(index, e.target.value)}
+                  >
+                    <option></option>
+                    <option>Sheetwise</option>
+                    <option>Work & Turn</option>
+                    <option>Tumble</option>
+                  </Input>
+                </td>
+                <td>
+                  <Button color='danger' onClick={() => handleRemove(index)}>
+                    -
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Col>
+    </Row>
+    <Row>
+        <Col className='col-12'>
+          <ButtonGroup className='btn-group'>
+            <Button
+              outline
+              color='success'
+              onClick={addSheetRouteToPart}
+              id='addSheetRouteButton'
+            >
+              Add to Part
+            </Button>
+            <Button color='danger' className='btn' id='clearSheetRouteButton'>
+              Clear
+            </Button>
+          </ButtonGroup>
+        </Col>
+      </Row>
+
+    </>
+  );
+};
+</script>

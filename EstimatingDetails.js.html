@@ -1,0 +1,208 @@
+<script type='text/babel'>
+const { useState, useRef, useEffect, useReducer } = React
+const { Container, 
+    Row, 
+    Col, 
+    Label,
+    Input, 
+    Form, 
+    FormGroup, 
+    Alert,
+    ButtonGroup,
+    Button,
+    ButtonToggle
+ } = Reactstrap 
+
+
+const EstimatingDetails = (props) => {
+  const [fieldValue, setFieldValue] = useState(null);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newCustomerData, setNewCustomerData] = useState(null);  
+  const [isOpen, setIsOpen] = useState(false);
+  const [pmList, setPMList] = useState([]);
+  const [repList, setRepList] = useState([]);
+  
+  
+  useEffect(() => {
+  if (props.activeTab !== 2) {
+    return;
+  }
+
+  newNumber().then((result) => {
+    setFieldValue(result);
+  }).catch((error) => {
+    console.error(error);
+  });
+}, [props.activeTab]);
+
+
+
+  useEffect(() => {
+  newNumber().then((result) => {
+    setFieldValue(result);
+  }).catch((error) => {
+    console.error(error);
+  });
+}, []);
+
+
+  const newNumber = () => {
+  return new Promise((resolve, reject) => {
+    google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).estNumberFinder();
+  });
+  };
+
+  
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const fetchPMs = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setPMList).getPMs();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPMs();
+  }, []);
+
+  useEffect(() => {
+    const fetchSalesReps = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setRepList).getSalesReps();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSalesReps();
+  }, []);
+
+  const handleCustomerSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    const filtered = props.customerList.filter(customer => customer.toLowerCase().includes(query));
+    setFilteredCustomers(filtered);
+  };
+
+
+  const handleSaveAndContinue = async () => {
+    const customer = document.getElementById('cust').value;
+    const projectTitle = document.getElementById('desc').value;
+    const projectManager = document.getElementById('pm').value;
+    const salesRep = document.getElementById('rep').value;
+    const jobType = document.getElementById('type').value;
+    const previousJob = document.getElementById('prev').value;
+  
+    const rowData = [customer, projectTitle, projectManager, salesRep, jobType, previousJob];
+
+    const newNumber = await google.script.run.withSuccessHandler(() => {
+      props.setActiveTab(3);
+    }).estDetailsToSheet(rowData);
+    setFieldValue(newNumber);
+  };
+
+  const handleClearButton = () => {
+    document.getElementById('cust').value = '';
+    document.getElementById('desc').value = '';
+    document.getElementById('pm').value = '';
+    document.getElementById('rep').value = '';
+    document.getElementById('type').value = '';
+    document.getElementById('prev').value = '';
+  };
+
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <Container>
+      <Form>
+        <Row>
+          <Col>
+            <h5>Project Details</h5>
+          </Col>
+          <Col>
+            <div className='d-flex justify-content-end'>
+              Estimate Number: {fieldValue}
+            </div>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Label htmlFor='desc'>Project Title</Label>
+          <Input type='text' name='desc' id='desc' />
+          </Row>
+        <Row>
+          <Col>
+            <Label htmlFor='cust'>Customer</Label>
+            <Input 
+              type='text' 
+              name='cust' 
+              id='cust' 
+              list='customerList' 
+              onChange={handleCustomerSearch} 
+            />
+            <datalist id='customerList'>
+              {filteredCustomers.map(customer => (
+                <option key={customer} value={customer} />
+              ))}
+            </datalist>
+            <br/>
+            New Customer? &nbsp; &nbsp; &nbsp; 
+            <CustomerModal />
+          </Col>
+          <Col>
+            <Label htmlFor='pm'>Project Manager</Label>
+            <Input type='select' id='pm' name='pm' className='form-control'>
+              <option></option>
+              {pmList.map((pm, index) => (
+                      <option key={index}>{pm}</option>
+                    ))}
+            </Input>
+            <Label htmlFor='rep'>Sales Rep</Label>
+            <Input type='select' id='rep' name='rep' className='form-control'>
+              <option></option>
+              {repList.map((rep, index) => (
+                      <option key={index}>{rep}</option>
+                    ))}
+            </Input>
+          </Col>
+          <Col>
+            <Label htmlFor='type'>Job Type</Label>
+            <Input type='select' name='type' id='type' className='form-control'>
+              <option></option>
+              <option>New Job</option>
+              <option>ERP</option>
+              <option>Reprint w/Changes</option>
+            </Input>
+            <Label htmlFor='prev'>Previous Job</Label>
+            <Input type='text' name='prev' id='prev' className='form-control' />
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <div className='d-flex justify-content-end'>
+            <ButtonGroup className='btn-group'>
+              <Button outline color='primary' id='saveButton' onClick={handleSaveAndContinue}>
+                Save & Continue
+              </Button>
+
+              <Button color='danger' className='btn' id='clearButton' onClick={handleClearButton}>
+                Clear
+              </Button>
+            </ButtonGroup>
+          </div>
+        </Row>
+      </Form>
+    </Container>
+  );
+};
+
+
+</script>

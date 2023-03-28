@@ -1,0 +1,66 @@
+<script type='text/babel'>
+const {useState} = React
+const { Nav, NavItem, NavLink, Card, CardBody, Container, Row, Col, Collapse, Button } = Reactstrap
+
+const LaborNav = (props) => {
+    const [active, setActive] = useState(1);
+    const [partName, setPartName] = useState(props.partName)
+    useEffect(() => {
+    setPartName(props.partName);
+  }, [props.partName]);
+
+  const handlePartNameChange = (newPartName) => {
+    setPartName(newPartName);
+    props.onPartNameChange(newPartName);
+  };
+  return (
+    <>
+      <Row>
+        <Nav
+        tabs>
+          <NavItem>
+            <NavLink onClick={() =>setActive(1)}>
+                Sheet
+            </NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink onClick={() =>setActive(2)}>
+                  Component Finishing
+              </NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink onClick={() =>setActive(3)}>
+                  Product Finishing
+              </NavLink>
+          </NavItem>
+        </Nav>
+      </Row>
+      <Row>
+        <Collapse isOpen={active === 1 ? true : false}>
+        <Card>
+          <CardBody>
+          This card modifies the press sheet for this sole component.
+          <br/>
+            <AvailableMachines partName={partName} onPartNameChange={handlePartNameChange}/>
+          </CardBody>
+        </Card>
+      </Collapse>
+      <Collapse isOpen={active === 2 ? true : false}>
+        <Card>
+          <CardBody>
+            <CompFinMachines />
+          </CardBody>
+        </Card>
+      </Collapse>
+      <Collapse isOpen={active === 3 ? true : false}>
+        <Card>
+          <CardBody>
+            <ProdFinMachines />
+          </CardBody>
+        </Card>
+      </Collapse>
+    </Row>
+  </>
+  )
+}
+</script>

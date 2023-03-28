@@ -1,0 +1,124 @@
+<script type="text/babel">
+const { useEffect } = React;
+const { Nav, NavLink, NavItem, Col } = Reactstrap
+
+const SideNav = (props) =>{ 
+const { visible } = props;
+  const navStyle = {
+    display: visible ? 'block' : 'none',
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '200px',
+    height: '100%',
+    backgroundColor: '#f8f9fa',
+    padding: '20px',
+    zIndex: '100'
+  };
+
+  return (
+    <Col className='col-2'>
+    <Nav
+    tabs
+    vertical
+    style={navStyle}
+    >
+        <NavItem>
+            <NavLink
+                active
+                href='#'
+                >
+                    <i class="fa-solid fa-caravan" /> Home
+                </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink
+            active
+            href='#'
+            >
+                <i class="fa-solid fa-user-astronaut" /> System
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-eraser" /> Estimating
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-list-check" /> Order Entry
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-calendar-days" /> Scheduling
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-people-carry-box" /> Production
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-boxes-stacked" /> Inventory
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-truck-plane" /> Shipping 
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-shop" /> Purchasing / AP
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-receipt" /> Invoicing
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-dumpster-fire" /> Costing
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-chart-line" /> Reports
+            </NavLink>
+        </NavItem>
+        <NavItem>
+            <NavLink 
+            active
+            href='#'>
+                <i class="fa-solid fa-person-circle-question" /> Help
+            </NavLink>
+        </NavItem>
+    </Nav>
+    </Col>
+  )
+}
+
+</script>

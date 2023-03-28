@@ -1,0 +1,150 @@
+<script type='text/babel'>
+const {useState} = React
+const { Nav, NavItem, NavLink, Card, CardBody, Container, Row, Collapse } = Reactstrap
+
+const EstimatingNav = (props) => {
+    const [active, setActive] = useState(1);
+    const [customerList, setCustomerList] = useState([]);
+    const [estimateList, setEstimateList] = useState([])
+    const [fieldValue, setFieldValue] = useState(null)
+    
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setCustomerList).getCustomers();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCustomers();
+  }, []);
+    const setActiveTab = (index) => {
+    setActive(index);
+      }
+
+    useEffect(() => {
+    const fetchEstimates = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setEstimateList).getEstimates();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+      fetchEstimates();
+    }, []);
+   
+  return (
+      <Container>
+      <Row>
+        <Nav tabs>
+          <NavItem>
+            <NavLink onClick={() =>setActive(1)}>Start</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(2)}>Project Header</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(3)}>Prepress</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(4)}>Parts</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(5)}>Production</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(6)}>Extras</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(7)}>Shipping</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(8)}>Notes</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(9)}>Outcomes</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={() => setActive(10)}>Quote</NavLink>
+          </NavItem>
+        </Nav>
+      </Row>
+      <Row>
+        <Collapse isOpen={active === 1 ? true : false}>
+          <Card>
+            <CardBody>
+              <EstimatingStartScreen setActiveTab={setActiveTab} user={props.user} estimateList={estimateList} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 2 ? true : false}>
+          <Card>
+            <CardBody>
+              <EstimatingDetails fieldValue={fieldValue} setActiveTab={setActiveTab} customerList={customerList} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 3 ? true : false}>
+          <Card>
+            <CardBody>
+              <SpecComponent fieldValue={fieldValue} setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 4 ? true : false}>
+          <Card>
+            <CardBody>
+              <ProductSpecs setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 5 ? true : false}>
+          <Card>
+            <CardBody>
+              <ProductionRoute setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 6 ? true : false}>
+          <Card>
+            <CardBody>
+              <Extras setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 7 ? true : false}>
+          <Card>
+            <CardBody>
+              <ShippingCost setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 8 ? true : false}>
+          <Card>
+            <CardBody>
+              <EstimateNotes setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+        <Collapse isOpen={active === 9 ? true : false}>
+          <Card>
+            <CardBody>
+              <EstimateNotes setActiveTab={setActiveTab} />
+            </CardBody>
+            <Collapse isOpen={active === 10 ? true : false}>
+          <Card>
+            <CardBody>
+              <EstimateNotes setActiveTab={setActiveTab} />
+            </CardBody>
+          </Card>
+        </Collapse>
+          </Card>
+        </Collapse>
+      </Row>
+    </Container>
+  );
+}
+
+</script>

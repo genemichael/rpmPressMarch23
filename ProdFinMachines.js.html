@@ -1,0 +1,107 @@
+<script type='text/babel'>
+const { useState } = React
+const { Button, Table, Row, Col } = Reactstrap
+
+
+const ProdFinMachines = () => {
+    const [ active, setActive ] = useState(false)
+    const [selectedMachines, setSelectedMachines] = useState([]);
+    const [machines, setMachines] = useState([]);
+    const selectedPart =() =>{}
+    const selectedToggleIsTrue = () => {
+        setActive(current => !current)
+    };
+        useEffect(() => {
+    const fetchCompMachines = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setMachines).getFinishingMachines();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCompMachines();
+  }, []);
+
+  const handleAdd = (machineName) => {
+    setSelectedMachines((prevMachines) => [...prevMachines, { name: machineName }]);
+  };
+
+  const handleRemove = (index) => {
+    setSelectedMachines((prevMachines) => {
+      const newMachines = [...prevMachines];
+      newMachines.splice(index, 1);
+      return newMachines;
+    });
+  };
+
+    return (
+        <>
+           <Row>
+      <Col className='col-5'>
+        <Table hover>
+          <thead>
+            <tr>
+              <th>Part</th>
+              <th>Selected</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>
+                <input type="checkbox" id="selectedComps" checked={active}  />
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      
+        <Table hover>
+          <thead>
+            <tr>
+              <th>Machine</th>
+              <th>Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            {machines.map((machine) => (
+              <tr key={machine}>
+                <td>{machine}</td>
+                <td>
+                  <Button color='info' onClick={() => handleAdd(machine)}>
+                    +
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Col>
+      <Col className='col-2'></Col>
+      <Col className='col-5'>
+        <Table hover>
+          <thead>
+            <tr>
+              <th>Selected Machine</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedMachines.map((machine, index) => (
+              <tr key={index}>
+                <td>{machine.name}</td>
+                <td>
+                  <Button color='danger' onClick={() => handleRemove(index)}>
+                    -
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Col>
+    </Row>
+    </>
+  );
+};
+</script>

@@ -1,0 +1,91 @@
+<script type="text/babel">
+const { useState } = React
+const { FormGroup, Label, Input } = Reactstrap
+
+const ShippingCost = (props) => {
+  const [ourTruckCost, setOurTruckCost] = useState(0);
+  const [groundShippingCost, setGroundShippingCost] = useState(0);
+  const [twoDayShippingCost, setTwoDayShippingCost] = useState(0);
+  const [overnightShippingCost, setOvernightShippingCost] = useState(0);
+
+  const handleOurTruckCostChange = (event) => {
+    setOurTruckCost(event.target.value);
+  };
+
+  const handleGroundShippingCostChange = (event) => {
+    setGroundShippingCost(event.target.value);
+  };
+
+  const handleTwoDayShippingCostChange = (event) => {
+    setTwoDayShippingCost(event.target.value);
+  };
+
+  const handleOvernightShippingCostChange = (event) => {
+    setOvernightShippingCost(event.target.value);
+  };
+
+  const handleSaveAndContinue = async () => {
+  const shipData = [
+  ourTruckCost,
+  document.getElementById('ourTruck').value,
+  groundShippingCost,
+  document.getElementById('groundShippingCost').value,
+  twoDayShippingCost,
+  document.getElementById('twoDayShippingCost').value,
+  overnightShippingCost,
+  document.getElementById('overnightShippingCost').value
+  ]
+
+
+  
+    const newNumber = await google.script.run.withSuccessHandler(() => {
+      props.setActiveTab(4);
+    }).sendShipData(shipData);
+  }
+
+  return (
+  <>
+    <FormGroup>
+      <Label>Quantity</Label>
+      <Input type='select' id='estimateQuantities'>
+        <option></option>
+      </Input>
+      <Label>Shipping Cost:</Label>
+      <Input type="number" placeholder="Our Truck" onChange={handleOurTruckCostChange} id="ourTruck"/>
+      <Label>Our Truck Shipping Cost: ${ourTruckCost}</Label>
+
+      <Input type="number" placeholder="Ground Shipping" onChange={handleGroundShippingCostChange} id="groundShippingCost"/>
+      <Label>Ground Shipping Cost: ${groundShippingCost}</Label>
+
+      <Input type="number" placeholder="2 Day" onChange={handleTwoDayShippingCostChange} id="twoDayShippingCost"/>
+      <Label>2 Day Shipping Cost: ${twoDayShippingCost}</Label>
+
+      <Input type="number" placeholder="Overnight" onChange={handleOvernightShippingCostChange} id="overnightShippingCost"/>
+      <Label>Overnight Shipping Cost: ${overnightShippingCost}</Label>
+    </FormGroup>
+    <Row>
+      <div className='d-flex justify-content-end'>  
+        <ButtonGroup className='btn-group'>
+          <Button 
+              outline
+              color='primary'
+              id='saveButton'
+              onClick={handleSaveAndContinue}
+              >
+                Save & Continue
+          </Button>
+            
+          <Button
+            color='danger'
+            className='btn'
+            id='clearButton'>
+              Clear
+          </Button>
+        </ButtonGroup>
+      </div>
+    </Row>
+    </>
+  );
+};
+
+</script>

@@ -1,0 +1,142 @@
+<script type='text/babel'>
+
+const { useState, useEffect } = React
+const { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } = Reactstrap
+
+const SpecialSubstrate = () => {
+const [modal, setModal] = useState(false);
+        const [substrateData, setSubstrateData] = useState([]);
+        const [vendorList, setVendorList] = useState([]);
+        const [specialSubstrate, setSpecialSubstrate] = useState(false)
+        const [basisData, setBasisData] = useState([]);
+        const specialSubstrateIsTrue = () => {
+            setSpecialSubstrate(current => !current)
+        }
+        const handleToggleSwitchChange = () => {
+          setModal(!modal);
+          setSpecialSubstrate(current => !current);
+          
+        };
+        const handleCancel = () => {
+            setSpecialSubstrate(current => !current)
+            setModal(!modal);
+        }
+        
+        const handleSave = async (event) => {
+          event.preventDefault();
+          const formData = [
+            document.getElementById("substrateName").value,
+            document.getElementById("substrateDimA").value,
+            document.getElementById("substrateDimB").value,
+            document.getElementById("basisWeight").value,
+            document.getElementById("basisType").value,
+            document.getElementById("pricePerM").value,
+            document.getElementById("vendor").value,
+            document.getElementById("sheetsPerPkg").value,
+            document.getElementById("numOutOfParent").value,
+            
+          ]
+          setSubstrateData([...substrateData, formData]);
+          
+          const newSpecialSubstrate = await google.script.run.withSuccessHandler(() => {
+            setModal(false);
+          }).putSubstrates(formData);
+        };  
+
+        useEffect(() => {
+          const fetchBasisTypes = async () => {
+            try {
+              const res = await google.script.run.withSuccessHandler(setBasisData).getBasisTypes();
+              console.log(res);
+            } catch (error) {
+              console.error(error);
+            }
+        };
+          fetchBasisTypes();
+        }, []);
+
+        useEffect(() => {
+          const fetchVendors = async () => {
+            try {
+              const res = await google.script.run.withSuccessHandler(setVendorList).getVendors();
+              console.log(res);
+            } catch (error) {
+              console.error(error);
+            }
+        };
+          fetchVendors();
+        }, []);
+        
+        return (
+          <>
+            <input
+                type="checkbox"
+                id='specialSubstrate'
+                checked={specialSubstrate}
+                onChange={handleToggleSwitchChange}
+              />
+            <Modal isOpen={modal} toggle={handleToggleSwitchChange}>
+              <ModalHeader toggle={handleToggleSwitchChange}>Add Substrate</ModalHeader>
+              <ModalBody>
+                <Form onSubmit={handleSave}>
+                  <FormGroup>
+                    <Label for="substrateName">Substrate Name</Label>
+                    <Input type="text" name="substrateName" id="substrateName" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="substrateDimA">Dim A</Label>
+                    <Input type="text" name="substrateDimA" id="substrateDimA" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="substrateDimB">Dim B</Label>
+                    <Input type="text" name="substrateDimB" id="substrateDimB" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="basisWeight">Basis Weight</Label>
+                    <Input type="text" name="basisWeight" id="basisWeight" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="basisType">Basis Type</Label>
+                    <Input type="select" name="basisType" id="basisType">
+                    <option></option>
+                    {basisData.map((basis, index) => (
+                      <option key={index}>{basis}</option>
+                    ))}
+                    </Input>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="pricePerM">Price per M</Label>
+                    <Input type="text" name="pricePerM" id="pricePerM" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="sheetsPerPkg">Sheets per Package</Label>
+                    <Input type="text" name="sheetsPerPkg" id="sheetsPerPkg" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="numOutOfParent">Number out of Parent</Label>
+                    <Input type="text" name="numOutOfParent" id="numOutOfParent" />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="vendor">Vendor</Label>
+                    <Input type="select" name="vendor" id="vendor">
+                    <option></option>
+                    {vendorList.map((vend, index) => (
+                      <option key={index}>{vend}</option>
+                    ))}
+                    </Input>
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" form="form" color="primary" outline onClick={handleSave}>
+                  Save
+                </Button>
+                <Button color="secondary" outline onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+            </>
+          );
+        };
+</script>

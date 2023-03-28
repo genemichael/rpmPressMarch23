@@ -1,0 +1,52 @@
+<script type="text/babel">
+const { useState, useRef, useEffect, useReducer } = React
+  const App = () => {
+  
+  const initialState = {
+    fieldValue: '',
+    counter: 0, // initialize the counter to 0
+  };
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'setFieldValue':
+        return { ...state, fieldValue: action.payload };
+      case 'incrementCounter': // add a case to increment the counter
+        return { ...state, counter: state.counter + 1 };
+      default:
+        return state;
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    google.script.run.withSuccessHandler((fieldValue) => {
+      dispatch({ type: 'setFieldValue', payload: fieldValue });
+    }).getFieldValue();
+  }, []);
+  
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+  google.script.run.withSuccessHandler((user) => {
+    setUser(user);
+  }).getUser();
+}, []);
+
+  
+
+  return (
+    <>
+      <Navibar 
+        user={user}
+      />
+      <EstimatingNav
+        user={user}
+      />
+    </>
+  );
+};
+
+
+</script>

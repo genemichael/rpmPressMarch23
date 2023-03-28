@@ -1,0 +1,263 @@
+<script type='text/babel'>
+const { useState, useEffect } = React
+const { 
+    Row,
+    Col,
+    Button,
+    Collapse,
+    Container,
+    Card,
+    CardBody,
+    ButtonGroup,
+    Input,
+    Form
+ } = Reactstrap
+
+
+const ProductSpecs = (props) => {
+    
+    const [specialSubstrate, setSpecialSubstrate] = useState(false)
+    const [fieldValue, setFieldValue] = useState(null)
+    const [substrates, setSubstrates] = useState([])
+    const [partsAreOpen, setPartsAreOpen] = useState(false);
+    const [quantitiesAreOpen, setQuantitiesAreOpen] = useState(false);
+    const [partName, setPartName] = useState('');
+    const [partDetails, setPartDetails] = useState(null);
+    
+
+    const specialSubstrateIsTrue = () => {
+        setSpecialSubstrate(current => !current)
+    }
+    const toggleParts = ()=> {
+        setPartsAreOpen(!partsAreOpen)
+    }
+
+    const toggleQuantities = ()=> {
+        setQuantitiesAreOpen(!quantitiesAreOpen)
+    }
+
+  
+
+
+  useEffect(() => {
+    const fetchSubstrates = async () => {
+      try {
+        const res = await google.script.run.withSuccessHandler(setSubstrates).getSubstrates();
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSubstrates();
+  }, []);
+
+    const addAnother = () => {}
+    const savePart = () => {
+    const partName = document.getElementById('partName').value;
+    const pDimA = document.getElementById('pDimA').value;
+    const pDimB = document.getElementById('pDimB').value;
+    const pages = document.getElementById('pages').value;
+    const sDimA = document.getElementById('sDimA').value;
+    const sDimB = document.getElementById('sDimB').value;
+    const numOut = document.getElementById('numOut').value;
+    const substrate = document.getElementById('substrate').value;
+    
+    const colsA = document.getElementById('colsA').value;
+    const colsB = document.getElementById('colsB').value;
+    const versions = document.getElementById('versions').value;
+
+    const formData = [partName, pDimA, pDimB, pages, sDimA, sDimB, numOut, substrate,'' , colsA, colsB, versions];
+    const matData = [partName, substrate, sDimA, sDimB];
+    google.script.run.putStandardSubstrate(matData);
+    google.script.run.putPart(formData)
+        }
+
+        
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      newNumber().then((result) => {
+        setFieldValue(result);
+      }).catch((error) => {
+        console.error(error);
+      });
+    }, 2000); // delay of 2 seconds
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const newNumber = () => {
+  return new Promise((resolve, reject) => {
+    google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).estNumberFinder();
+  });
+  };
+
+  const handlePartNameChange = (newPartName) => {
+    setPartName(newPartName.toString());
+  };
+
+  const sendQuantities = () => {}
+
+  return (
+    <Container>
+        <Row>
+            <Col>
+                <h5>Production Routing</h5>
+            </Col>
+            <Col>
+                <div className='d-flex justify-content-end'>
+                    Estimate Number: {fieldValue}
+                </div>
+            </Col>
+            <div className='d-flex justify-content-end'>
+            
+            </div>
+        </Row>
+        <Row>
+            <p className="lead">Define each part.</p>
+        </Row>
+        <Form id='partsSpec'>
+            <Row>
+                <Col>
+                    Part name
+                    <Input type='text' tabIndex={0} id='partName' placeholder="This part's description." />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    Part Dim A
+                    <Input type='number' tabIndex={1} id='pDimA' />
+                </Col>
+                <Col>
+                    Part Dim B
+                    <Input type='number' tabIndex={2} id='pDimB' />
+                </Col>
+                <Col>
+                    Pages
+                    <Input type='number' tabIndex={3} id='pages' />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    Substrate Dim A
+                    <Input type='number' tabIndex={4} id='sDimA' />
+                </Col>
+                <Col>
+                    Substrate Dim B
+                    <Input type='number' tabIndex={5} id='sDimB' />
+                </Col>
+                <Col>
+                    Number Out
+                    <Input type='number' tabIndex={6} id='numOut' />
+                </Col>
+            </Row>
+            <Row>
+                <Col className='col-6'>
+                    Substrate
+                    <Input
+                    type='select' tabIndex={7} id='substrate'>
+                    <option></option>
+                    {substrates.map((substrate, index) => (
+                      <option key={index}>{substrate}</option>
+                    ))}
+                    </Input>
+                </Col>
+                <Col>
+                    <br/>
+                    Unlisted Substrate?
+                </Col>
+                <Col>
+                <br/>
+                <SpecialSubstrate />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    Colors Side A
+                    <Input type='number' tabIndex={8} id='colsA' />
+                </Col>
+                <Col>
+                    Colors Side B
+                    <Input type='number' tabIndex={9} id='colsB' />
+                </Col>
+                <Col>
+                    Versions
+                    <Input type='number' tabIndex={10} id='versions' />
+                </Col>
+            </Row>
+            <br/>
+            <Row>
+                <div className='d-grid gap-2'>
+                    <Button
+                    outline
+                    color='info'
+                    id='parts'
+                    onClick={toggleParts}
+                    title='Parts'>
+                      Parts
+                    </Button>
+                    <Collapse isOpen={partsAreOpen}>
+                        <Card>
+                        <CardBody>
+                            <EstimateParts partName={partName} onPartNameChange={handlePartNameChange} />
+                        </CardBody>
+                        </Card>
+                    </Collapse>
+                    <Button
+                    outline
+                    color='info'
+                    id='parts'
+                    onClick={toggleQuantities}
+                    title='Quantities'>
+                        Quantities
+                    </Button>
+                    <Collapse isOpen={quantitiesAreOpen}>
+                        <Card>
+                        <CardBody>
+                            <EstimateQuantities partName={partName} onPartNameChange={handlePartNameChange} />
+                        </CardBody>
+                        </Card>
+                    </Collapse>
+                </div>
+            </Row>
+        </Form>
+        <br/>
+        <Row>
+         
+    <div className='d-flex justify-content-end'>
+    
+    
+        <ButtonGroup className='btn-group'>
+            
+            <Button
+            outline
+            color='success'
+            onClick={savePart} 
+            id='saveButton'>
+            Save Part
+            </Button>
+            
+
+            <Button 
+                outline
+                color='primary'
+                id='saveButton'
+                >Save
+            </Button>
+            <Button
+            outline
+            color='warning'
+            id='addAnother'
+            onClick={addAnother}>
+                Add Another
+            </Button>
+            <Button
+            color='danger'
+            className='btn'
+            id='clearButton'>Clear</Button>
+        </ButtonGroup>
+        </div>
+        </Row>
+    </Container>
+  )
+}
+</script>

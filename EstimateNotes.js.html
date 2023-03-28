@@ -1,0 +1,94 @@
+<script type="text/babel">
+const { useState } = React
+const { FormGroup, Label, Input, Form, Button } = Reactstrap
+
+const EstimateNotes = () => {
+  const [noteTitle, setNoteTitle] = useState('');
+  const [note, setNote] = useState('');
+  const [machine, setMachine] = useState('');
+  const [part, setPart] = useState('');
+  const [printToTicket, setPrintToTicket] = useState(false);
+
+  const handleNoteTitleChange = (event) => {
+    setNoteTitle(event.target.value);
+  };
+
+  const handleNoteChange = (event) => {
+    setNote(event.target.value);
+  };
+
+  const handleMachineChange = (event) => {
+    setMachine(event.target.value);
+  };
+
+  const handlePartChange = (event) => {
+    setPart(event.target.value);
+  };
+
+  const handlePrintToTicketChange = (event) => {
+    setPrintToTicket(event.target.checked);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle form submission here
+  };
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      <FormGroup>
+        <Label for="noteTitle">Note Title</Label>
+        <Input type="text" name="noteTitle" id="noteTitle" value={noteTitle} onChange={handleNoteTitleChange} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="note">Note</Label>
+        <Input type="textarea" name="note" id="note" value={note} onChange={handleNoteChange} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="machine">Machine</Label>
+        <Input type="select" name="machine" id="machine" value={machine} onChange={handleMachineChange}>
+          <option value="">Select Machine</option>
+          <option value="machine1">Machine 1</option>
+          <option value="machine2">Machine 2</option>
+          <option value="machine3">Machine 3</option>
+        </Input>
+      </FormGroup>
+      <FormGroup>
+        <Label for="part">Part</Label>
+        <Input type="select" name="part" id="part" value={part} onChange={handlePartChange}>
+          <option value="">Select Part</option>
+          <option value="part1">Part 1</option>
+          <option value="part2">Part 2</option>
+          <option value="part3">Part 3</option>
+        </Input>
+      </FormGroup>
+      <FormGroup check>
+        <Label check>
+          <Input type="checkbox" name="printToTicket" id="printToTicket" checked={printToTicket} onChange={handlePrintToTicketChange} />
+          Print to Ticket
+        </Label>
+      </FormGroup>
+      <div className='d-flex justify-content-end'>  
+        <ButtonGroup className='btn-group'>
+          <Button 
+              outline
+              color='primary'
+              id='saveButton'
+              type="submit"
+              >
+                Save & Continue
+          </Button>
+            
+          <Button
+            color='danger'
+            className='btn'
+            id='clearButton'>
+              Clear
+          </Button>
+        </ButtonGroup>
+      </div>
+    </Form>
+  );
+};
+
+</script>

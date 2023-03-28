@@ -1,0 +1,29 @@
+<script type='text/babel'>
+const {Container, Navbar, NavbarBrand } = Reactstrap
+const {useState} = React
+
+const Navibar = (props) => {
+  const [showSideNav, setShowSideNav] = useState(false);
+
+  const handleHatClick = () => {
+    setShowSideNav(!showSideNav);
+  };
+
+  return (
+    <div>
+      <Navbar dark color="info" sticky="top" expand='md' key={props.fieldValue}>
+        <Container>
+          <NavbarBrand href='#' onClick={handleHatClick}>
+            <i className="fa-solid fa-hat-wizard" />
+          </NavbarBrand>
+          RPM Press - {props.user}
+        </Container>
+      </Navbar>
+      <SideNav visible={showSideNav} />
+    </div>
+  );
+};
+
+
+
+</script>
