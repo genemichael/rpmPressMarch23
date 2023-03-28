@@ -184,6 +184,196 @@ function getPartsDetail(partName) {
   return matchingPart;
 }
 
+function generatePdf() {
+
+  var originalSpreadsheet = SpreadsheetApp.getActive();
+    var sheets = originalSpreadsheet.getSheets();
+    var sheetName = originalSpreadsheet.getActiveSheet().getName();
+    var sourceSheet = originalSpreadsheet.getSheetByName(sheetName)
+  
+      var c = SpreadsheetApp.getActive().getSheetByName('Quote Letter').getRange('C6');
+      var number = c.getValue();
+      var d = SpreadsheetApp.getActive().getSheetByName('Quote Letter').getRange('G5');
+      var customer = d.getValue();
+      var pdfName = number+ ", "+customer;
+      var folderID = "15czubt3kG5n1IyaGsSYhSCFesjK68gAJ"; 
+      var folder = DriveApp.getFolderById(folderID);
+    
+      
+      
+      var destSpreadsheet = SpreadsheetApp.open(DriveApp.getFileById(originalSpreadsheet.getId()).makeCopy("tmp_convert_to_pdf", folder))
+  
+  
+    
+    var destSheet = destSpreadsheet.getSheets()[0];
+  
+    // Repace cell values with text (to avoid broken references).
+    var sourceRange = sourceSheet.getRange(1,1,sourceSheet.getMaxRows(),sourceSheet.getMaxColumns());
+    var sourcevalues = sourceRange.getValues();
+    var destRange = destSheet.getRange(1, 1, destSheet.getMaxRows(), destSheet.getMaxColumns());
+    destRange.setValues(sourcevalues);
+  
+  
+    // Save to pdf.
+    var theBlob = destSpreadsheet.getBlob().getAs('application/pdf').setName(pdfName);
+      
+    var newFile = folder.createFile(theBlob);
+  
+    
+  
+  DriveApp.getFileById(destSpreadsheet.getId()).setTrashed(true);
+  
+    
+  
+    SpreadsheetApp.getUi().alert('New PDF file created in the Quote Letters folder')
+  
+    
+  
+  }
+  
+  
+          
+  function pdfandemail () {
+    var originalSpreadsheet = SpreadsheetApp.getActive();
+  
+  var sourcesheet = originalSpreadsheet.getSheetByName("Quote Letter");
+  var sourcerange = sourcesheet.getRange('A1:I32');  
+  var sourcevalues = sourcerange.getValues();
+  var data = sourcesheet.getDataRange().getValues();
+      var c = SpreadsheetApp.getActive().getSheetByName('Quote Letter').getRange('C6');
+      var number = c.getValue();
+      var d = SpreadsheetApp.getActive().getSheetByName('Quote Letter').getRange('G5');
+      var customer = d.getValue();
+    var sss = originalSpreadsheet.getSheetByName("Automated Emails");
+    
+  var newSpreadsheet = SpreadsheetApp.create(number + customer); 
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var projectname = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = sourcesheet.copyTo(newSpreadsheet);
+  var destrange = sheet.getRange('A1:I32');
+  destrange.setValues(sourcevalues);
+  newSpreadsheet.getSheetByName('Sheet1').activate();
+  newSpreadsheet.deleteActiveSheet();
+  
+  var pdf = DriveApp.getFileById(newSpreadsheet.getId());
+  var theBlob = pdf.getBlob().getAs('application/pdf').setName(number +" " + customer+".pdf");
+  
+  var folderID = "15czubt3kG5n1IyaGsSYhSCFesjK68gAJ"; 
+  var folder = DriveApp.getFolderById(folderID);
+  var newFile = folder.createFile(theBlob);
+    var fileID = newFile.getId();
+  
+  DriveApp.getFileById(newSpreadsheet.getId()).setTrashed(true);
+   var emailaddress = sss.getRange('F3').getValue();  
+    var subject = sourcesheet.getRange('G5:G6').getValues();
+    var message = ("Your quote is attached."+"\n"+"This is an automated message");
+    var attach = DriveApp.getFileById(fileID);
+     var blob = attach.getAs(MimeType.PDF);
+    MailApp.sendEmail(emailaddress, subject, message, {attachments:[blob]})
+    SpreadsheetApp.getUi().alert('Your email has been sent');
+  }
+
+  function jobTicket() {
+    var originalSpreadsheet = SpreadsheetApp.getActive();
+    
+    var sourcesheet = originalSpreadsheet.getSheetByName("Job Ticket");
+    var sourcerange = sourcesheet.getRange('A1:K175');  
+    var sourcevalues = sourcerange.getValues();
+    var data = sourcesheet.getDataRange().getValues();
+        var c = SpreadsheetApp.getActive().getSheetByName('Job Ticket').getRange('C2');
+        var number = c.getValue();
+        var d = SpreadsheetApp.getActive().getSheetByName('Quote Letter').getRange('G5');
+        var customer = d.getValue();
+      
+    var newSpreadsheet = SpreadsheetApp.create(number + customer); 
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var projectname = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = sourcesheet.copyTo(newSpreadsheet);
+    var destrange = sheet.getRange('A1:K175');
+    destrange.setValues(sourcevalues);
+    newSpreadsheet.getSheetByName('Sheet1').activate();
+    newSpreadsheet.deleteActiveSheet();
+    
+    var pdf = DriveApp.getFileById(newSpreadsheet.getId());
+    var theBlob = pdf.getBlob().getAs('application/pdf').setName(number +" " + customer+".pdf");
+    
+    var folderID = "REPLACE ME"; 
+    var folder = DriveApp.getFolderById(folderID);
+    var newFile = folder.createFile(theBlob);
+      var ticketID = newFile.getId()
+      sourcesheet.getRange('J2').setValue(ticketID)
+    
+    DriveApp.getFileById(newSpreadsheet.getId()).setTrashed(true);  
+    }
+    function record() {
+      // In this case, target is the database spreadsheet
+      var target = SpreadsheetApp.openById('REPLACE ME');
+      var funcsourcesheet = target.getSheetByName('Job Schedule');
+      // Source is the active estimate/job ticket document
+      var source = SpreadsheetApp.getActiveSpreadsheet();
+      // Calling out the document ID allows us to use the IMPORTRANGE function to call living cell data from the documents to the database
+      var id = source.getId();
+      funcsourcesheet.getRange('P2').setValue(id);
+      var targetsheet = target.getSheetByName('Records');
+      var lr = targetsheet.getLastRow();
+      var lc = targetsheet.getLastColumn();
+      var line = (lr+1)
+      funcsourcesheet.getRange('A3').setValue(line);
+      var estimate = funcsourcesheet.getRange("A2")
+      estimate.setValue("=IMPORTRANGE("&line&",'Job Schedule!A2')")
+      var rangeValues = funcsourcesheet.getRange('M2:02');
+      
+      // We start with column 13, because this is where the static data starts. 1 is column A, 2 is B, etc
+      rangeValues.copyValuesToRange(targetsheet, 13, lc, (lr+1), (lr+1));
+      }
+      
+
+      function digSchedule() {
+        var source = SpreadsheetApp.getActiveSpreadsheet();
+        var sourcesheet = source.getSheetByName('Job Schedule');
+        
+        var target = SpreadsheetApp.getActiveSpreadsheet()
+          var rangeValues = sourcesheet.getRange('A2:O2');
+          var A1Range = rangeValues.getA1Notation();
+          var SData = rangeValues.getValues()
+          var vS = target.getSheetByName('Job Ticket')
+          var vStartDate = vS.getRange("H11").getValue();
+          var vSTI = sourcesheet.getRange("L2").getValue();
+          var vEndDate = vS.getRange("H11").getValue(); 
+          var dur = sourcesheet.getRange("N2").getValue();
+          var vCust = vS.getRange("D3")
+          var vDesc = vS.getRange("D4")
+          var job = vS.getRange("C2")
+          var sales = source.getSheetByName("Automated Emails").getRange("F3").getValue();
+          var pm = source.getSheetByName("Automated Emails").getRange("F5").getValue();
+          var stat = vS.getRange("I11")
+          var po = vS.getRange("C11").getValue()
+          var pd = vS.getRange("H11").getValue()
+          var dd = vS.getRange("E11").getValue()
+          var note = vS.getRange("B8").getValue()
+          var ticket = vS.getRange('J2')
+         var calendar = CalendarApp.getCalendarById(
+         'REPLACE ME');
+          var event =  calendar.createEvent(stat.getValue()+" - " +job.getValue()+", "+ vCust.getValue()+", " +vDesc.getValue() ,
+          new Date(vStartDate),
+         new Date(vEndDate) )
+        
+         event.setDescription(note + "\n" + " Proof Out: " +po + "\n" + " Print Date: " + pd + "\n" + " Due Date: " + dd + "\n" + " Duration: " + dur) ; 
+        Logger.log('Event ID: ' + event.getId());
+          event.addGuest(sales)
+          var eID = event.getId();
+          vS.getRange("M2").setValue(eID);
+        
+          var jobname = vS.getRange('D4').getValue();
+          var account = vS.getRange('D3').getValue();
+          var end = vS.getRange('E11').getValue();
+            var message = "This job has been scheduled " +'\n\n' +"Job Number: " +job.getValue() + '\n\n' + "Account: " + account + '\n\n' + "Job Description: " + jobname + '\n\n' +"Press Date: " + vStartDate + '\n\n'+"Requested Ship Date: " + end + '\n\n' +"Calendar Event: "+eID 
+            var subject = job.getValue()+" "+jobname+" has been scheduled";
+            var timezone = "GMT-8"
+         var emailaddress = "gene.m.lauria@rrd.com"
+         
+         MailApp.sendEmail(emailaddress, subject, message, {cc:pm})
+        }
 
 function putCustomer(newCustomer) {
   customersSheet.getSheetByName('Customer List').getRange(1,customersSheet.getLastRow()+1).setValues([newCustomer]);
