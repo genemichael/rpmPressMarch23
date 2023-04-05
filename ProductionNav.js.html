@@ -1,0 +1,30 @@
+<script type="text/babel">
+  const { useState } = React;
+
+  function ProductionNav(props) {
+    const [activeTab, setActiveTab] = useState("shopFloor");
+
+    return (
+      <nav>
+        <ul>
+          <li
+            className={activeTab === "shopFloor" ? "active" : ""}
+            onClick={() => setActiveTab("shopFloor")}
+          >
+            Shop Floor
+          </li>
+          <li
+            className={activeTab === "quality" ? "active" : ""}
+            onClick={() => setActiveTab("quality")}
+          >
+            Quality
+          </li>
+        </ul>
+        {activeTab === "shopFloor" ? (
+          <div>Shop Floor content goes here</div>
+        ) : null}
+        {activeTab === "quality" ? <div>Quality content goes here</div> : null}
+      </nav>
+    );
+  }
+</script>

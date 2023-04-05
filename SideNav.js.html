@@ -1,124 +1,128 @@
 <script type="text/babel">
-const { useEffect } = React;
-const { Nav, NavLink, NavItem, Col } = Reactstrap
+  const { useEffect } = React;
+  const { Nav, NavLink, NavItem, Col } = Reactstrap;
 
-const SideNav = (props) =>{ 
-const { visible } = props;
-  const navStyle = {
-    display: visible ? 'block' : 'none',
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '200px',
-    height: '100%',
-    backgroundColor: '#f8f9fa',
-    padding: '20px',
-    zIndex: '100'
+  const SideNav = (props) => {
+    const { visible } = props;
+    const navStyle = {
+      display: visible ? "block" : "none",
+      position: "fixed",
+      top: "0",
+      left: "0",
+      width: "200px",
+      height: "100%",
+      backgroundColor: "#f8f9fa",
+      padding: "20px",
+      zIndex: "100",
+    };
+
+    const renderNavContent = () => {
+      switch (activeNavLink) {
+        case "home":
+          return <HomeNav />;
+        case "system":
+          return <SystemNav />;
+        case "estimating":
+          return <EstimatingNav />;
+        case "planning":
+          return <PlanningNav />;
+        case "scheduling":
+          return <SchedulingNav />;
+        case "production":
+          return <ProductionNav />;
+        case "inventory":
+          return <InventoryNav />;
+        case "shipping":
+          return <ShippingNav />;
+        case "purchasing":
+          return <PurchasingNav />;
+        case "invoicing":
+          return <InvoicingNav />;
+        case "costing":
+          return <CostingNav />;
+        case "reporting":
+          return <ReportingNav />;
+        case "help":
+          return <HelpNav />;
+        default:
+          return null;
+      }
+    };
+
+    const handleNavLinkClick = (navLink) => {
+      setActiveNavLink(navLink);
+    };
+
+    return (
+      <Col className="col-2">
+        <Nav tabs vertical style={navStyle}>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("home")}>
+              <i class="fa-solid fa-caravan" /> Home
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("system")}>
+              <i class="fa-solid fa-user-astronaut" /> System
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("estimating")}>
+              <i class="fa-solid fa-eraser" /> Estimating
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("planning")}>
+              <i class="fa-solid fa-list-check" /> Order Entry
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("scheduling")}>
+              <i class="fa-solid fa-calendar-days" /> Scheduling
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("planning")}>
+              <i class="fa-solid fa-people-carry-box" /> Production
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("inventory")}>
+              <i class="fa-solid fa-boxes-stacked" /> Inventory
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("shipping")}>
+              <i class="fa-solid fa-truck-plane" /> Shipping
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("purchasing")}>
+              <i class="fa-solid fa-shop" /> Purchasing / AP
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("invoicing")}>
+              <i class="fa-solid fa-receipt" /> Invoicing
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("costing")}>
+              <i class="fa-solid fa-dumpster-fire" /> Costing
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("reporting")}>
+              <i class="fa-solid fa-chart-line" /> Reports
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink active onClick={() => handleNavLinkClick("help")}>
+              <i class="fa-solid fa-person-circle-question" /> Help
+            </NavLink>
+          </NavItem>
+        </Nav>
+      </Col>
+    );
   };
-
-  return (
-    <Col className='col-2'>
-    <Nav
-    tabs
-    vertical
-    style={navStyle}
-    >
-        <NavItem>
-            <NavLink
-                active
-                href='#'
-                >
-                    <i class="fa-solid fa-caravan" /> Home
-                </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink
-            active
-            href='#'
-            >
-                <i class="fa-solid fa-user-astronaut" /> System
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-eraser" /> Estimating
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-list-check" /> Order Entry
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-calendar-days" /> Scheduling
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-people-carry-box" /> Production
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-boxes-stacked" /> Inventory
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-truck-plane" /> Shipping 
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-shop" /> Purchasing / AP
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-receipt" /> Invoicing
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-dumpster-fire" /> Costing
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-chart-line" /> Reports
-            </NavLink>
-        </NavItem>
-        <NavItem>
-            <NavLink 
-            active
-            href='#'>
-                <i class="fa-solid fa-person-circle-question" /> Help
-            </NavLink>
-        </NavItem>
-    </Nav>
-    </Col>
-  )
-}
-
 </script>

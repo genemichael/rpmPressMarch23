@@ -1,0 +1,57 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const ReportingNav = () => {
+    const [activeTab, setActiveTab] = useState("Finance");
+
+    const toggleTab = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "Finance" ? "active" : ""}
+              onClick={() => toggleTab("Finance")}
+            >
+              Finance
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "Operations" ? "active" : ""}
+              onClick={() => toggleTab("Operations")}
+            >
+              Operations
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "Procurement" ? "active" : ""}
+              onClick={() => toggleTab("Procurement")}
+            >
+              Procurement
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="Finance">
+            <h4>Finance Reporting</h4>
+            <p>Put your finance reporting content here.</p>
+          </TabPane>
+          <TabPane tabId="Operations">
+            <h4>Operations Reporting</h4>
+            <p>Put your operations reporting content here.</p>
+          </TabPane>
+          <TabPane tabId="Procurement">
+            <h4>Procurement Reporting</h4>
+            <p>Put your procurement reporting content here.</p>
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>

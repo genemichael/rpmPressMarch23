@@ -1,0 +1,109 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const InventoryNav = () => {
+    const [activeTab, setActiveTab] = useState("1");
+
+    const toggle = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "1" ? "active" : ""}
+              onClick={() => toggle("1")}
+            >
+              Standard items
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "2" ? "active" : ""}
+              onClick={() => toggle("2")}
+            >
+              Receive against purchase order
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "3" ? "active" : ""}
+              onClick={() => toggle("3")}
+            >
+              Receive against job
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "4" ? "active" : ""}
+              onClick={() => toggle("4")}
+            >
+              Receive return
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "5" ? "active" : ""}
+              onClick={() => toggle("5")}
+            >
+              Receive without purchase order
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "6" ? "active" : ""}
+              onClick={() => toggle("6")}
+            >
+              Reporting - available inventory
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "7" ? "active" : ""}
+              onClick={() => toggle("7")}
+            >
+              Location tagging
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "8" ? "active" : ""}
+              onClick={() => toggle("8")}
+            >
+              Inventory labeling
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="1">
+            <h4>Standard items content</h4>
+          </TabPane>
+          <TabPane tabId="2">
+            <h4>Receive against purchase order content</h4>
+          </TabPane>
+          <TabPane tabId="3">
+            <h4>Receive against job content</h4>
+          </TabPane>
+          <TabPane tabId="4">
+            <h4>Receive return content</h4>
+          </TabPane>
+          <TabPane tabId="5">
+            <h4>Receive without purchase order content</h4>
+          </TabPane>
+          <TabPane tabId="6">
+            <h4>Reporting - available inventory content</h4>
+          </TabPane>
+          <TabPane tabId="7">
+            <h4>Location tagging content</h4>
+          </TabPane>
+          <TabPane tabId="8">
+            <h4>Inventory labeling content</h4>
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>

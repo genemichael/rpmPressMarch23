@@ -1,0 +1,107 @@
+<script type="text/babel">
+  const { useState, useEffect } = React;
+  const { Nav, NavItem, NavLink, Card, CardBody, Container, Row, Collapse } =
+    Reactstrap;
+
+  const SystemNav = (props) => {
+    const [active, setActive] = useState(1);
+    const setActiveTab = (index) => {
+      setActive(index);
+    };
+
+    return (
+      <Container>
+        <Row>
+          <Nav tabs>
+            <NavItem>
+              <NavLink onClick={() => setActive(1)}>Time Entry</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(2)}>Settings</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(3)}>
+                Estimating Standards
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(4)}>Material Pricing</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(5)}>
+                Employee Hourly Rate
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(6)}>Equipment Costs</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(7)}>Mark Up Method</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(8)}>Mark Up Amount</NavLink>
+            </NavItem>
+          </Nav>
+        </Row>
+        <Row>
+          <Collapse isOpen={active === 1 ? true : false}>
+            <Card>
+              <CardBody>
+                <TimeEntry setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 2 ? true : false}>
+            <Card>
+              <CardBody>
+                <Settings setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 3 ? true : false}>
+            <Card>
+              <CardBody>
+                <EstimatingStandards setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 4 ? true : false}>
+            <Card>
+              <CardBody>
+                <MaterialPricing setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 5 ? true : false}>
+            <Card>
+              <CardBody>
+                <EmployeeHourlyRate setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 6 ? true : false}>
+            <Card>
+              <CardBody>
+                <EquipmentCosts setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 7 ? true : false}>
+            <Card>
+              <CardBody>
+                <MarkUpMethod setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 8 ? true : false}>
+            <Card>
+              <CardBody>
+                <MarkUpAmount setActiveTab={setActiveTab} />
+              </CardBody>
+            </Card>
+          </Collapse>
+        </Row>
+      </Container>
+    );
+  };
+</script>

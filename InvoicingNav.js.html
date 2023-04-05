@@ -1,0 +1,45 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const InvoicingNav = () => {
+    const [activeTab, setActiveTab] = useState("generate");
+
+    const toggleTab = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "generate" ? "active" : ""}
+              onClick={() => toggleTab("generate")}
+            >
+              Generate Invoice
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "deliver" ? "active" : ""}
+              onClick={() => toggleTab("deliver")}
+            >
+              Deliver Invoice
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="generate">
+            <h4>Generate Invoice Tab Content</h4>
+            {/* add your content for the Generate Invoice tab here */}
+          </TabPane>
+          <TabPane tabId="deliver">
+            <h4>Deliver Invoice Tab Content</h4>
+            {/* add your content for the Deliver Invoice tab here */}
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>

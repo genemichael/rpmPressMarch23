@@ -1,0 +1,77 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const ShippingNav = () => {
+    const [activeTab, setActiveTab] = useState("1");
+
+    const toggle = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "1" ? "active" : ""}
+              onClick={() => {
+                toggle("1");
+              }}
+            >
+              Pick Inventory
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "2" ? "active" : ""}
+              onClick={() => {
+                toggle("2");
+              }}
+            >
+              Ship Inventory
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "3" ? "active" : ""}
+              onClick={() => {
+                toggle("3");
+              }}
+            >
+              Schedule Shipment
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "4" ? "active" : ""}
+              onClick={() => {
+                toggle("4");
+              }}
+            >
+              Generate Labels
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="1">
+            <h4>Pick Inventory</h4>
+            {/* content for Pick Inventory tab goes here */}
+          </TabPane>
+          <TabPane tabId="2">
+            <h4>Ship Inventory</h4>
+            {/* content for Ship Inventory tab goes here */}
+          </TabPane>
+          <TabPane tabId="3">
+            <h4>Schedule Shipment</h4>
+            {/* content for Schedule Shipment tab goes here */}
+          </TabPane>
+          <TabPane tabId="4">
+            <h4>Generate Labels</h4>
+            {/* content for Generate Labels tab goes here */}
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>

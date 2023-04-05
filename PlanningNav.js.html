@@ -1,0 +1,104 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, Card, CardBody, Container, Row, Collapse } =
+    Reactstrap;
+
+  const PlanningNav = (props) => {
+    const [active, setActive] = useState(1);
+
+    const setActiveTab = (index) => {
+      setActive(index);
+    };
+
+    return (
+      <Container>
+        <Row>
+          <Nav tabs>
+            <NavItem>
+              <NavLink onClick={() => setActive(1)}>
+                Create Standard Item
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(2)}>
+                Convert Estimate to Order
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(3)}>
+                Create Order Without an Estimate
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(4)}>Push to Schedule</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(5)}>
+                Push to Procurement
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(6)}>Assign Contacts</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => setActive(7)}>
+                Generate Job Tickets
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </Row>
+        <Row>
+          <Collapse isOpen={active === 1 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for creating standard item goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 2 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for converting estimate to order goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 3 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for creating order without an estimate goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 4 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for pushing to schedule goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 5 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for pushing to procurement goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 6 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for assigning contacts goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={active === 7 ? true : false}>
+            <Card>
+              <CardBody>
+                {/* Component for generating job tickets goes here */}
+              </CardBody>
+            </Card>
+          </Collapse>
+        </Row>
+      </Container>
+    );
+  };
+</script>

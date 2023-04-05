@@ -1,0 +1,91 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const PurchasingNav = () => {
+    const [activeTab, setActiveTab] = useState("purchaseRequirements");
+
+    const toggle = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "purchaseRequirements" ? "active" : ""}
+              onClick={() => {
+                toggle("purchaseRequirements");
+              }}
+            >
+              Purchase Requirements
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "orderStandardItem" ? "active" : ""}
+              onClick={() => {
+                toggle("orderStandardItem");
+              }}
+            >
+              Order Standard Item
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "orderMaterialItem" ? "active" : ""}
+              onClick={() => {
+                toggle("orderMaterialItem");
+              }}
+            >
+              Order Material Item
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "orderSalesItem" ? "active" : ""}
+              onClick={() => {
+                toggle("orderSalesItem");
+              }}
+            >
+              Order Sales Item
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "generatePurchaseOrder" ? "active" : ""}
+              onClick={() => {
+                toggle("generatePurchaseOrder");
+              }}
+            >
+              Generate Purchase Order
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="purchaseRequirements">
+            <h4>Purchase Requirements</h4>
+            <p>Here is the content for Purchase Requirements</p>
+          </TabPane>
+          <TabPane tabId="orderStandardItem">
+            <h4>Order Standard Item</h4>
+            <p>Here is the content for Order Standard Item</p>
+          </TabPane>
+          <TabPane tabId="orderMaterialItem">
+            <h4>Order Material Item</h4>
+            <p>Here is the content for Order Material Item</p>
+          </TabPane>
+          <TabPane tabId="orderSalesItem">
+            <h4>Order Sales Item</h4>
+            <p>Here is the content for Order Sales Item</p>
+          </TabPane>
+          <TabPane tabId="generatePurchaseOrder">
+            <h4>Generate Purchase Order</h4>
+            <p>Here is the content for Generate Purchase Order</p>
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>

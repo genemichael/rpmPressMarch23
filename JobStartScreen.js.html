@@ -1,0 +1,56 @@
+<script type="text/babel">
+const { useState, useEffect } = React
+const { FormGroup, Label, Input, Button } = Reactstrap
+
+const GreetingComponent = ({ user }) => {
+  const [estimate, setEstimate] = useState('');
+  const [validationError, setValidationError] = useState(false);
+  const [availableEstimates, setAvailableEstimates] = useState([]);
+
+  useEffect(() => {
+    // fetch available estimates from Google Apps Script on mount
+    google.script.run.withSuccessHandler(setAvailableEstimates).getExistingEstimates();
+  }, []);
+
+  const handleEstimateChange = (event) => {
+    setEstimate(event.target.value);
+    setValidationError(!availableEstimates.includes(event.target.value));
+  };
+
+  const handleLoadEstimate = () => {
+    if (!validationError) {
+      // code to load estimate into new job goes here
+      console.log(`Loading estimate ${estimate} into new job for ${user}`);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Hello, {user}!</h1>
+      <FormGroup>
+        <Label for="estimateInput">Enter an estimate number:</Label>
+        <Input
+          type="text"
+          name="estimateInput"
+          id="estimateInput"
+          value={estimate}
+          onChange={handleEstimateChange}
+          list="estimateList"
+          invalid={validationError}
+        />
+        <datalist id="estimateList">
+          {availableEstimates.map((estimate) => (
+            <option key={estimate} value={estimate} />
+          ))}
+        </datalist>
+        {validationError && (
+          <div className="invalid-feedback">Please enter a valid estimate number.</div>
+        )}
+      </FormGroup>
+      <Button color="primary" onClick={handleLoadEstimate}>
+        Load Estimate
+      </Button>
+    </div>
+  );
+};
+</script>

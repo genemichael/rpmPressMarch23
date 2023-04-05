@@ -1,0 +1,56 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Table, Card, CardBody, CardTitle, Container, Row, Col } = Reactstrap;
+
+  const HomeNav = () => {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    // Update current time every second
+    setInterval(() => setCurrentTime(new Date()), 1000);
+
+    const quickLinks = [
+      { name: "Link 1", url: "#" },
+      { name: "Link 2", url: "#" },
+      { name: "Link 3", url: "#" },
+      { name: "Link 4", url: "#" },
+    ];
+
+    return (
+      <Container>
+        <Row className="mb-4">
+          <Col className="text-right">
+            <h4>Hello, User!</h4>
+            <p>{currentTime.toLocaleString()}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Card>
+              <CardBody>
+                <CardTitle tag="h5">Quick Links</CardTitle>
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>URL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {quickLinks.map((link) => (
+                      <tr key={link.name}>
+                        <td>{link.name}</td>
+                        <td>
+                          <a href={link.url}>{link.url}</a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
+  };
+</script>

@@ -1,0 +1,76 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, Card, CardBody, Container, Row, Collapse } =
+    Reactstrap;
+
+  const SchedulingNav = (props) => {
+    const [activeTab, setActiveTab] = useState(1);
+
+    const toggleTab = (tab) => {
+      if (activeTab !== tab) {
+        setActiveTab(tab);
+      }
+    };
+
+    return (
+      <Container>
+        <Row>
+          <Nav tabs>
+            <NavItem>
+              <NavLink onClick={() => toggleTab(1)} active={activeTab === 1}>
+                Schedule
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => toggleTab(2)} active={activeTab === 2}>
+                View Job
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => toggleTab(3)} active={activeTab === 3}>
+                View Machine
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => toggleTab(4)} active={activeTab === 4}>
+                View Materials
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={() => toggleTab(5)} active={activeTab === 5}>
+                Automation
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </Row>
+        <Row>
+          <Collapse isOpen={activeTab === 1}>
+            <Card>
+              <CardBody>{/* content for Schedule tab */}</CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={activeTab === 2}>
+            <Card>
+              <CardBody>{/* content for View Job tab */}</CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={activeTab === 3}>
+            <Card>
+              <CardBody>{/* content for View Machine tab */}</CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={activeTab === 4}>
+            <Card>
+              <CardBody>{/* content for View Materials tab */}</CardBody>
+            </Card>
+          </Collapse>
+          <Collapse isOpen={activeTab === 5}>
+            <Card>
+              <CardBody>{/* content for Automation tab */}</CardBody>
+            </Card>
+          </Collapse>
+        </Row>
+      </Container>
+    );
+  };
+</script>

@@ -1,0 +1,91 @@
+<script type="text/babel">
+  const { useState } = React;
+  const { Nav, NavItem, NavLink, TabContent, TabPane } = Reactstrap;
+
+  const CostingNav = () => {
+    const [activeTab, setActiveTab] = useState("1");
+
+    const toggle = (tab) => {
+      if (activeTab !== tab) setActiveTab(tab);
+    };
+
+    return (
+      <div>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeTab === "1" ? "active" : ""}
+              onClick={() => {
+                toggle("1");
+              }}
+            >
+              Estimate Versus Actual (Job)
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "2" ? "active" : ""}
+              onClick={() => {
+                toggle("2");
+              }}
+            >
+              Estimate Versus Actual (Material)
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "3" ? "active" : ""}
+              onClick={() => {
+                toggle("3");
+              }}
+            >
+              Labor Costs by Period
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "4" ? "active" : ""}
+              onClick={() => {
+                toggle("4");
+              }}
+            >
+              Spend
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={activeTab === "5" ? "active" : ""}
+              onClick={() => {
+                toggle("5");
+              }}
+            >
+              Profitability
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="1">
+            <h4>Estimate Versus Actual (Job)</h4>
+            {/* Add your content here */}
+          </TabPane>
+          <TabPane tabId="2">
+            <h4>Estimate Versus Actual (Material)</h4>
+            {/* Add your content here */}
+          </TabPane>
+          <TabPane tabId="3">
+            <h4>Labor Costs by Period</h4>
+            {/* Add your content here */}
+          </TabPane>
+          <TabPane tabId="4">
+            <h4>Spend</h4>
+            {/* Add your content here */}
+          </TabPane>
+          <TabPane tabId="5">
+            <h4>Profitability</h4>
+            {/* Add your content here */}
+          </TabPane>
+        </TabContent>
+      </div>
+    );
+  };
+</script>
